@@ -212,7 +212,10 @@ mzr_init(int argc, char **argv)
         g_signal_connect(G_OBJECT(mzr.win), "delete-event",
                         G_CALLBACK(gtk_main_quit), NULL);
         mzr.vte = vte_terminal_new();
-        font = pango_font_description_from_string(MZR_FONT);
+        if (mzr.opt.font)
+                font = pango_font_description_from_string(mzr.opt.font);
+        else
+                font = pango_font_description_from_string(MZR_FONT);
 #define OPT(fn, opt) fn(VTE_TERMINAL(mzr.vte), opt)
         OPT(vte_terminal_set_font, font);
         pango_font_description_free(font);
