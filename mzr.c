@@ -61,7 +61,8 @@ mzr_eof(GtkWidget *w, void *data)
         (void) w;
         (void) data;
 
-        exit(0);
+        g_spawn_close_pid(mzr.pid);
+        gtk_main_quit();
 }
 
 static
@@ -237,6 +238,8 @@ mzr_init(int argc, char **argv)
         gtk_container_add(GTK_CONTAINER(mzr.win), mzr.vte);
         g_signal_connect(G_OBJECT(mzr.vte), "bell", G_CALLBACK(mzr_beep), 0);
         g_signal_connect(G_OBJECT(mzr.vte), "eof", G_CALLBACK(mzr_eof), 0);
+        g_signal_connect(G_OBJECT(mzr.vte), "child-exited", G_CALLBACK(mzr_eof),
+                        0);
         g_signal_connect(G_OBJECT(mzr.vte), "window-title-changed",
                         G_CALLBACK(mzr_title_change), 0);
         mzr_size_reset(mzr.col, mzr.row);
